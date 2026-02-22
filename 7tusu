@@ -1,0 +1,31 @@
+import numpy as np
+import sounddevice as sd
+import tkinter as tk
+
+# ======================
+# Parametreler
+# ======================
+fs = 8000
+T = 0.3
+
+def play_7():
+    t = np.arange(int(fs*T)) / fs
+    
+    f_low = 852
+    f_high = 1209
+    
+    signal = np.sin(2*np.pi*f_low*t) + np.sin(2*np.pi*f_high*t)
+    signal = signal / 2  # Normalizasyon
+    
+    sd.play(signal, fs)
+
+# ======================
+# GUI
+# ======================
+root = tk.Tk()
+root.title("DTMF - 7 Tuşu")
+
+button = tk.Button(root, text="7", font=("Arial", 40), width=5, height=2, command=play_7)
+button.pack(pady=50)
+
+root.mainloop()
