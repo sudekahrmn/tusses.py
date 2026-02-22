@@ -1,31 +1,40 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import sounddevice as sd
-import tkinter as tk
 
 # ======================
 # Parametreler
 # ======================
-fs = 8000
-T = 0.3
-
-def play_7():
-    t = np.arange(int(fs*T)) / fs
-    
-    f_low = 852
-    f_high = 1209
-    
-    signal = np.sin(2*np.pi*f_low*t) + np.sin(2*np.pi*f_high*t)
-    signal = signal / 2  # Normalizasyon
-    
-    sd.play(signal, fs)
+fs = 8000        # Örnekleme frekansı
+T = 0.3          # Süre (saniye)
+N = int(fs * T)  # Örnek sayısı
+t = np.arange(N) / fs
 
 # ======================
-# GUI
+# 7 Tuşu Frekansları
 # ======================
-root = tk.Tk()
-root.title("DTMF - 7 Tuşu")
+f_low = 852
+f_high = 1209
 
-button = tk.Button(root, text="7", font=("Arial", 40), width=5, height=2, command=play_7)
-button.pack(pady=50)
+# ======================
+# Sinyal üretimi
+# ======================
+signal = np.sin(2*np.pi*f_low*t) + np.sin(2*np.pi*f_high*t)
 
-root.mainloop()
+# Normalizasyon (clipping önleme)
+signal = signal / 2
+
+# ======================
+# Grafik
+# ======================
+plt.plot(t, signal)
+plt.title("DTMF - 7 Tuşu (852 Hz + 1209 Hz)")
+plt.xlabel("Zaman (s)")
+plt.ylabel("Genlik")
+plt.show()
+
+# ======================
+# Ses Çalma
+# ======================
+sd.play(signal, fs)
+sd.wait()
